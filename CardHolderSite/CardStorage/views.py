@@ -15,6 +15,15 @@ class Storage(ListView):
     model = Card
     context_object_name = "cards"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        for i in context["cards"]:
+            if i.status == True:
+                i.status = "Активна"
+            elif i.status == False:
+                i.status = "Просрочена"
+        return context
+
 
 class GeneratorCard(View):
     form_class = GeneratorForm
