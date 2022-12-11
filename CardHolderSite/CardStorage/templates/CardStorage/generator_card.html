@@ -1,0 +1,32 @@
+{% extends "CardStorage/base.html" %}
+{% block content %}
+{% if form.errors %}
+<div class="alert alert-danger" role="alert">
+    Логин или пароль введены неверно! Попробуйте снова.
+</div>
+{% endif %}
+<div class="form-error">{{ form.non_field_errors }}</div>
+<form action="{% url 'generator' %}" method="post">
+    {% csrf_token %}
+    <div class="container">
+
+        <p>
+            <label class="form-label" for="{{ form.series.id_for_label }}">{{form.series.label}}: </label>
+            {{ form.series }}
+        </p>
+        <div class="form-error">{{ form.series.errors }}</div>
+        <p>
+            <label class="form-label" for="{{ form.end_date.id_for_label }}">{{form.end_date.label}}:</label>
+            {{ form.end_date }}
+        </p>
+        <div class="form-error">{{ form.end_date.errors }}</div>
+        <p>
+            <label class="form-label" for="{{ form.count_card.id_for_label }}">{{form.count_card.label}}:</label>
+            {{ form.count_card }}
+        </p>
+        <div class="form-error">{{ form.count_card.errors }}</div>
+
+        <button type="submit">Сгенерировать</button>
+    </div>
+</form>
+{% endblock %}

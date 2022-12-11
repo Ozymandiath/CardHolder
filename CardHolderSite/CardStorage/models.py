@@ -3,7 +3,7 @@ from django.db import models
 
 class Card(models.Model):
     series = models.PositiveIntegerField(verbose_name="Серия")
-    number = models.PositiveIntegerField(verbose_name="Номер")
+    number = models.CharField(max_length=20, verbose_name="Номер")
     release_date = models.DateTimeField(verbose_name="Дата создания")
     end_date = models.DateTimeField(verbose_name="Дата окончания активации")
     status = models.BooleanField(verbose_name="Статус")
