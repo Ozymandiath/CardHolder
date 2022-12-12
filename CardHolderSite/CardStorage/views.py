@@ -22,6 +22,12 @@ class ActivateCard(View):
         return redirect("profile", pk)
 
 
+class DeleteCard(View):
+    def get(self, request, pk):
+        Card.objects.get(pk=pk).delete()
+        return redirect("home")
+
+
 class Storage(ListView):
     template_name = "CardStorage/list_card.html"
     model = Card
