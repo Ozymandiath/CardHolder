@@ -1,0 +1,75 @@
+{% extends "CardStorage/base.html" %}
+{% block content %}
+
+<div class="d-flex justify-content-center mb-4">
+    <div class="card mb-3" style="width: 24rem; border-radius: 25px;">
+        <div class="card-body">
+            <p>
+            <h4 class="card-title text-center">{{card.number}}</h4>
+            </p>
+            <div class="col-md-8 ">
+                <div class="d-flex justify-content-between ">
+                    <h6 class="card-subtitle mb-2 text-muted">Серия: {{ card.series}}</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">Статус: {{ card.status}}</h6>
+                </div>
+            </div>
+            <p class="card-text"> Дата активации: {{ card.release_date}}
+                <br>
+                Дата окончания: {{ card.end_date}}
+            </p>
+            <div class="card text-center">
+                <a href="#" class="btn btn-outline-danger mb-2">Удалить карту</a>
+                {% if card.status == "Активна" %}
+                <a href="#" class="btn btn-outline-warning">Деактивировать</a>
+                {% else %}
+                <a href="#" class="btn btn-outline-warning">Активировать</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="justify-content-center mb-4">
+    <form action="{% url 'profile' card.pk %}" method="post">
+        {% csrf_token %}
+        <div class="row justify-content-center ">
+            <div class="col-md-2 col-sm-3 col-xs-3">
+                <span class="help-block text-muted small-font"> {{form.amount.label}}</span>
+                <input type="number" name="amount" id="id_amount" class="form-control"/>
+            </div>
+            <div class="col-md-2 col-sm-3 col-xs-3">
+                <span class="help-block text-muted small-font"> {{form.date_use.label}}</span>
+                <input type="text" name="date_use" id="id_date_use" class="form-control"/>
+            </div>
+            <button type="submit" class="ol-md-1 col-sm-2 col-xs-1 btn btn-outline-success">Добавить транзакцию</button>
+        </div>
+    </form>
+</div>
+<div class="justify-content-center">
+    <div class="row justify-content-center ">
+        <div class="col-md-2 col-sm-3 col-xs-3">
+            <span class="help-block text-muted small-font"> ID</span>
+            {% for i in transactions %}
+            <p>
+            {{ i.pk }}
+                </p>
+            {% endfor %}
+        </div>
+        <div class="col-md-2 col-sm-3 col-xs-3">
+            <span class="help-block text-muted small-font"> {{form.amount.label}}</span>
+            {% for i in transactions %}
+            <p>
+            {{ i.amount }}
+                </p>
+            {% endfor %}
+        </div>
+        <div class="col-md-2 col-sm-3 col-xs-3">
+            <span class="help-block text-muted small-font"> {{form.date_use.label}}</span>
+            {% for i in transactions %}
+            <p>
+            {{ i.date_use }}
+            </p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

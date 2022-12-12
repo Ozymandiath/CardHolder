@@ -6,10 +6,10 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.utils import timezone, dateformat
 from django.views import View
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
-from .forms import GeneratorForm, SearchForm
-from .models import Card
+from .forms import GeneratorForm, SearchForm, TransactionForm
+from .models import Card, CardTransaction
 
 
 class Storage(ListView):
@@ -38,10 +38,39 @@ class Storage(ListView):
                 i.status = "Активна"
             elif i.status == False:
                 i.status = "Просрочена"
-
         context["form"] = self.form()
-
         return context
+
+
+class ProfileCard(View):
+    template_name = "CardStorage/profile.html"
+    form_class = TransactionForm
+
+    def get(self, request, pk):
+        transactions = CardTransaction.objects.filter(card_id=pk)
+        card = Card.objects.get(pk=pk)
+        form = self.form_class()
+        if card.status == True:
+            card.status = "Активна"
+        elif card.status == False:
+            card.status = "Просрочена"
+
+        context = {
+            "card": card,
+            "transactions": transactions,
+            "form": form
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, pk):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            date_use = form.cleaned_data["date_use"]
+            amount = form.cleaned_data["amount"]
+            CardTransaction.objects.create(card_id=Card.objects.get(pk=pk), date_use=date_use, amount=amount)
+
+            return redirect("profile", pk)
+
 
 
 class GeneratorCard(View):

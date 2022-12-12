@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Card
+from .models import Card, CardTransaction
 
 
 class GeneratorForm(forms.Form):
@@ -33,3 +33,12 @@ class SearchForm(forms.ModelForm):
         self.fields['end_date'].required = False
         self.fields['status'].required = False
         self.fields['status'].value = True
+
+
+class TransactionForm(forms.ModelForm):
+    class Meta:
+        model = CardTransaction
+        fields = [
+            "date_use",
+            "amount"
+        ]
