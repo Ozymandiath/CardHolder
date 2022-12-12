@@ -12,6 +12,16 @@ from .forms import GeneratorForm, SearchForm, TransactionForm
 from .models import Card, CardTransaction
 
 
+class ActivateCard(View):
+    def get(self, request, pk):
+        card = Card.objects.get(pk=pk)
+        if card.status:
+            Card.objects.filter(pk=card.pk).update(status=False)
+        elif card.status == False:
+            Card.objects.filter(pk=card.pk).update(status=True)
+        return redirect("profile", pk)
+
+
 class Storage(ListView):
     template_name = "CardStorage/list_card.html"
     model = Card
@@ -70,7 +80,6 @@ class ProfileCard(View):
             CardTransaction.objects.create(card_id=Card.objects.get(pk=pk), date_use=date_use, amount=amount)
 
             return redirect("profile", pk)
-
 
 
 class GeneratorCard(View):
